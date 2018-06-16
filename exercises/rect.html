@@ -2,13 +2,18 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="rect.css">
+    <!-- jquery.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- jquery.velocity.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/2.0.5/velocity.js"></script>
   </head>
+
   <body>
     <p>Refresh this page to re-run the demo</p>
 
     <p>
       <b>Note:</b>
-      <i>X is horizontal axis</i>
+      <i>X is horizontal axis,</i>
       <i>Y is vertical axis</i>
     </p>
 
@@ -23,6 +28,19 @@
       stroke-width="0px"
       />
     </svg>
+
+    <script>
+
+// Animate an SVG element with a mix of standard CSS properties and SVG-specific properties.
+$("#rect")
+    .delay(500)
+    .velocity({ x: "+=200", y: "25%" })
+    .velocity({ fillGreen: 255, strokeWidth: 2 })
+    .velocity({ height: 90, width: 90 })
+    .velocity({ rotateZ: 90, scaleX: 0.5 })
+    .velocity("reverse", { delay: 250 });
+
+    </script>
 
   </body>
 </html>
