@@ -24,6 +24,4 @@ svg {
   width: 500px;
 }
 
-rect {
-  transform-origin: 0% 0%;
-}
+/* rect { transform-origin: 0% 0%; } */
