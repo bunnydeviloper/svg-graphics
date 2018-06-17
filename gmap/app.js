@@ -1,4 +1,4 @@
-const myMap = () => {
+function myMap() {
   const myCenter = new google.maps.LatLng(37.335942, -121.886908);
   const bigBasin = new google.maps.LatLng(37.172670, -122.221556);
   const santaCruz = new google.maps.LatLng(36.966560, -122.016581);
