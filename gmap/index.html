@@ -9,8 +9,9 @@
       <li>Set the map coordinates to your home town</li>
       <li>Add Google Mapps Overlay (= objects on the map that are bound to latitude/longtitude coordinates</li>
       <li>Add a path from San Jose to Big Basin, then to Santa Cruz</li>
+      <li>Attach event handlers: click marker to zoom in, then zoom out again after 3 seconds</li>
       <li>Add a random circle and an info window at marker</li>
-      <li>Attach event handlers: click marker to zoom</li>
+      <li>Add placeMarker() function which places a marker where the user has clicked, and shows an infowindow with the latitudes and longitudes of the marker</li>
     </ol>
   </body>
   <script>
@@ -33,10 +34,32 @@ function myMap() {
   });
   marker.setMap(map);
 
-  const infowindow = new google.maps.InfoWindow({
-    content: "Hello World!"
+  const infowindow = new google.maps.InfoWindow({content: "Hello World!"});
+
+  google.maps.event.addListener(marker, "click", function() {
+    const currentPos = map.getZoom();
+    map.setZoom(14);
+    map.setCenter(marker.getPosition());
+    window.setTimeout(function() {map.setZoom(currentPos)}, 3000);
+
+    infowindow.open(map, marker);
   });
-  infowindow.open(map,marker);
+
+  function placeMarker(map, location) {
+    const marker2 = new google.maps.Marker({
+      position: location,
+      map: map
+    });
+    const infowindow2 = new google.maps.InfoWindow({
+      content: 'Latitude: ' + location.lat() +
+      '<br>Longtitude: ' + location.lng()
+    });
+    infowindow2.open(map, marker2);
+  };
+
+  google.maps.event.addListener(map, "click", function(event) {
+    placeMarker(map, event.latLng);
+  });
 
   const myCity = new google.maps.Circle({
     center: googleBldg,
