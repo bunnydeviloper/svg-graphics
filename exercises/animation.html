@@ -9,7 +9,7 @@
     </svg>
 
     <h2>Zoom In Ellipse, change color from lime to red</h2>
-    <svg width="200" height="100">
+    <svg width="200" height="60">
       <ellipse cx="50" cy="50" rx="80" ry="30" fill="lime">
         <animate attributeName="cx" attributeType="XML" begin="0s" dur="5s" fill="freeze" from="0" to="80" /> 
         <animate attributeName="cy" attributeType="XML" begin="0s" dur="5s" fill="freeze" from="80" to="30" /> 
@@ -20,7 +20,7 @@
     </svg>
 
     <h2>Street Light Squares</h2>
-    <svg width="500" height="100">
+    <svg width="500" height="60">
       <rect width="50" height="50" x="20" y="0">
         <animate id="a1" attributeName="fill" from="green" to="red" dur="2s" fill="freeze" />
       </rect>
@@ -33,7 +33,7 @@
     </svg>
 
     <h2>Text with rotation and motion</h2>
-    <svg height="200" width="400">
+    <svg height="120" width="400">
       <g transform="translate(10,10)">
       <text id="textElement" x="0" y="0" fill="blue" style="font-size:15; visibility:hidden">I love SVG
         <set attributeName="visibility" attributeType="CSS" to="visible" begin="1s" dur="5s" fill="freeze" />
@@ -47,19 +47,18 @@
     </svg>
 
     <h2>Mutiple ellipses flower</h2>
-
-<svg width="100%" height="300px">
-    <g id="R1" transform="translate(250 250)"> 
-      <ellipse rx="100" ry="0" opacity=".3">
-      <animateTransform attributeName="transform" type="rotate" dur="7s" from="0" to="360" repeatCount="indefinite" />
-      <animate attributeName="cx" dur="8s" values="-20; 220; -20" repeatCount="indefinite" />
-      <animate attributeName="ry" dur="3s" values="10; 60; 10" repeatCount="indefinite" />
-      </ellipse>
-    </g>
-    <use xlink:href="#R1" transform="rotate(72 390 150)" />
-    <use xlink:href="#R1" transform="rotate(144 390 150)" />
-    <use xlink:href="#R1" transform="rotate(216 390 150)" />
-    <use xlink:href="#R1" transform="rotate(288 390 150)" />
+    <svg width="100%" height="300px">
+      <g id="R1" transform="translate(250 250)"> 
+        <ellipse rx="30" ry="0" opacity=".3">
+        <animateTransform attributeName="transform" type="rotate" dur="5s" from="0" to="360" repeatCount="indefinite" />
+        <animate attributeName="cx" dur="6s" values="20; 50; 20" repeatCount="indefinite" />
+        <animate attributeName="ry" dur="1s" values="5; 10; 5" repeatCount="indefinite" />
+        </ellipse>
+      </g>
+      <use xlink:href="#R1" transform="rotate(72 30 350)" />
+      <use xlink:href="#R1" transform="rotate(144 30 350)" />
+      <use xlink:href="#R1" transform="rotate(216 30 350)" />
+      <use xlink:href="#R1" transform="rotate(288 30 350)" />
     </svg>
     
   </body>
