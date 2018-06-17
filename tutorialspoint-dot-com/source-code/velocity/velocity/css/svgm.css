@@ -1,0 +1,17 @@
+body{
+    overflow:hidden;
+}
+
+.simple-circle{
+    color: rgba(1, 1, 140);
+}
+
+#svg-playground{
+    top: 0px;
+    left: 0px;
+    position: absolute;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+}

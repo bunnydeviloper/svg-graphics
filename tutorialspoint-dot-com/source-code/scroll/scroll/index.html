@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	
+
+	<link href="examples/fixed-positioning.css" rel="stylesheet" type="text/css" />
+	<link href="examples/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div id="bg1" data-0="background-position:0px 0px;" data-end="background-position:-500px -10000px;"><img src="logo.png"/></div>
+	<div id="bg2" data-0="background-position:0px 0px;" data-end="background-position:-500px -8000px;"><img src="logo.png"/></div>
+	<div id="bg3" data-0="background-position:0px 0px;" data-end="background-position:-500px -6000px;"><img src="logo.png"/></div>
+
+	<div id="progress" data-0="width:0%;background:hsl(200, 100%, 50%);" data-end="width:100%;background:hsl(920, 100%, 50%);">	</div>
+
+
+
+	<div id="transform" data-500="transform:scale(0) rotate(0deg);" data-1000="transform:scale(1) rotate(1440deg);opacity:1;" data-1600="" data-1700="transform:scale(5) rotate(3240deg);opacity:0;">
+		<h2>Tutorials Point</h2>
+		<p>Free tutorials and reference manuals with examples for Self Esteem, Managerial Economics, Apex, Xerces, Avro, Highcharts, CDMA, Graph Theory,</p>
+	</div>
+
+	<div id="properties" data-1700="top:100%;" data-2200="top:0%;" data-3000="display:block;" data-3700="top:-100%;display:none;">
+	<img src="mohtashim.jpg"/>
+		<h2>Mohtashim M.
+				<span>Founder & Managing Director</span></h2>
+		<p>Mohtashim is an MCA from AMU (Aligarah) and a Project Management Professional. He has more than 17 years of experience in Telecom and Datacom industries covering complete SDLC. He is managing in-house innovations, business planning, implementation, finance and the overall business development of Tutorials Point.</p>
+	</div>
+
+	<div id="easing_wrapper" data-0="display:none;" data-3900="display:block;" data-4900="background:rgba(0, 0, 0, 0);color[swing]:rgb(0,0,0);" data-5900="background:rgba(0,0,0,1);color:rgb(255,255,255);" data-10000="top:0%;" data-12000="top:-100%;">
+
+		<div id="easing" data-3900="left:100%" data-4600="left:15%;">
+			<h2>Team</h2>
+		
+		
+			<img src="gopal_verma.jpg"/>
+			<p>Gopal K Verma
+<span>Technical Manager</span></p>
+			<p>Gopal is an MCA from GJU (Hisar) and a Cisco Certified Network Professional. He has more than 11 years of experience in core data networking and telecommunications. He develops contents for Computer Science related subjects. He is also involved in developing Apps for various Mobile devices.</p>
+		
+			
+			
+			</div>
+		</div>
+
+		<div class="drop" data-6500="left:15%;bottom:100%;" data-9500="bottom:0%;">Java</div>
+		<div class="drop" data-6500="left:25%;bottom[quadratic]:100%;" data-9500="bottom:0%;">Android</div>
+		<div class="drop" data-6500="left:35%;bottom[cubic]:100%;" data-9500="bottom:0%;">HTML5</div>
+		<div class="drop" data-6500="left:45%;bottom[swing]:100%;" data-9500="bottom:0%;">Ruby-on-rails</div>
+		<div class="drop" data-6500="left:55%;bottom[WTF]:100%;" data-9500="bottom:0%;">PHP</div>
+		<div class="drop" data-6500="left:65%;bottom[inverted]:100%;" data-9500="bottom:0%;">CSS3</div>
+		<div class="drop" data-6500="left:75%;bottom[bounce]:100%;" data-9500="bottom:0%;">Angular.js</div>
+	</div>
+
+	<div id="download" data-10000="top[cubic]:100%;border-radius[cubic]:0em;background:rgb(0,50,100);border-width:0px;" data-12000="top:10%;border-radius:2em;background:rgb(190,230,255);border-width:10px;">
+		<h2>Company</h2>
+		<p>Tutorials Point originated from the idea that there exists a class of readers who respond better to online content and prefer to learn new skills at their own pace from the comforts of their drawing rooms.</p>
+
+<p>The journey commenced with a single tutorial on HTML in 2006 and elated by the response it generated, we worked our way to adding fresh tutorials to our repository which now proudly flaunts a wealth of tutorials and allied articles on topics ranging from programming languages to web designing to academics and much more.</p>
+
+		
+	</div>
+
+	<div id="scrollbar" data-0="top:0%;margin-top:2px;" data-end="top:100%;margin-top:-52px;"></div>
+
+	<script type="text/javascript" src="dist/skrollr.min.js"></script>
+
+	<!--[if lt IE 9]>
+	<script type="text/javascript" src="../skrollr-ie/dist/skrollr.ie.min.js"></script>
+	<![endif]-->
+
+	<script type="text/javascript">
+	var s = skrollr.init({
+		edgeStrategy: 'set',
+		easing: {
+			WTF: Math.random,
+			inverted: function(p) {
+				return 1-p;
+			}
+		}
+	});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+ 
+  <script src="snap.svg-min.js"></script>
+  <script src="clock.js"></script>
+  <style>
+    body { font-family: sans-serif;background-color: #46C2D4; }
+    div { width: 300px; heigth: 350px; float: left; text-align: center; margin-bottom: 2em; }
+    h1 { font-size: 1.6em; }
+    h2 { font-size: 1.2em; }
+    p { font-size: 0.9em; }
+    p.clear{ clear: left; }
+  </style>
+</head>
+<body>
+
+  <div>
+  <svg id="clockUK" width="300" height="300" style="
+    margin-left: 112px;
+">
+
+  </div>
+  
+ 
+
+<script>
+  // Start clocks
+  var uk = new Clock("clockUK");
+  uk.startClock();
+
+  var ukbounce = new Clock("clockUKBounce", { showSeconds: true, offset: 2, movement: "bounce" });
+  ukbounce.startClock();
+
+  var nyc = new Clock("clockNYC", -5);
+  nyc.startClock();
+
+  var clock = new Clock("clock", 21, 39);
+  clock.hideSecondHand();
+</script>
+</body>
+</html>

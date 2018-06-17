@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Create and Animate SVG Text </title>
+	</head>
+	<!--- - - - - - - - - - - - - INLINE STYLESHEET- - - - - - - - - - - - - -->
+	<style>
+	@font-face {
+			font-family: Amatic SC;
+			src: url(AmaticSC-Regular.ttf);
+		}
+	body {
+		background-color: #212A3F;
+	}
+	/* * * * * * * * * * * * * * * * * * * SVG * * * * * * * * * * * * * * * * * * * */
+		#svg-container {
+			position: relative;
+			width: 360px;
+			height: 110px;
+			margin: 40vh auto 0 auto;
+		}
+		#svg-canvas {
+			position: relative;
+			width: 360px;
+			height: 519px;
+			  margin-top: -198px;
+		}
+		
+	/* * * * * * * * * * * * * * * * * * * SOCIAL ICONS * * * * * * * * * * * * * * * * * * * */
+	a {
+		border: 0 none;
+		text-decoration: none;
+	}
+	button{
+	 height:20px; 
+    width:100px; 
+    margin: -20px -50px; 
+    position:relative;
+    top:50%; 
+    left:50%;}
+	
+        svg  {
+            overflow: visible;
+		
+			
+        }
+		image{
+		 margin: -20px -50px; 
+    position:relative;
+    top:50%; 
+    left:50%;
+		}
+        #mill1,
+        #mill2 {
+            -webkit-animation: spin 10s infinite linear;
+            -moz-animation: spin 10s infinite linear;
+            -ms-animation: spin 10s infinite linear;
+            -o-animation: spin 10s infinite linear;
+            animation: spin 10s infinite linear;
+        }
+        #mill1 {
+            -webkit-transform-origin: 234px 160px;
+            -moz-transform-origin: 234px 160px;
+            -ms-transform-origin: 234px 160px;
+            -o-transform-origin: 234px 160px;
+            transform-origin: 234px 160px;
+        }
+        #mill2 {
+            -webkit-transform-origin: 75px 161px;
+            -moz-transform-origin: 75px 161px;
+            -ms-transform-origin: 75px 161px;
+            -o-transform-origin: 75px 161px;
+            transform-origin: 75px 161px;
+        }
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: translate3d(0, 0, 0) rotateZ(0deg)
+            }
+            100% {
+                -webkit-transform: translate3d(0, 0, 0) rotateZ(360deg)
+            }
+        }
+        @-moz-keyframes spin {
+            0% {
+                -moz-transform: translate3d(0, 0, 0) rotateZ(0deg)
+            }
+            100% {
+                -moz-transform: translate3d(0, 0, 0) rotateZ(360deg)
+            }
+        }
+        @keyframes spin {
+            0% {
+                transform: translate3d(0, 0, 0) rotateZ(0deg)
+            }
+            100% {
+                transform: translate3d(0, 0, 0) rotateZ(360deg)
+            }
+        }
+        
+
+		/* * * * * * * * * * * * * * * * * * * END OF STYLESHEET * * * * * * * * * * * * * * * * * * * */
+	</style>
+
+	<body>
+		<div id="svg-container">
+
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 2896 1944">
+   
+
+        <image id="mill2" width="1388" height="1377" xlink:href="http://www.tutorialspoint.com/green/images/logo.png" />
+    </svg>
+  
+
+</div>
+<button onclick="myFunction()">Reload page</button>
+
+<script>
+function myFunction() {
+    location.reload();
+}
+</script>
+
+	
+	</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		
+		<link rel="shortcut icon" href="../favicon.ico">
+		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="css/tabs.css" />
+		<link rel="stylesheet" type="text/css" href="css/tabstyles.css" />
+  		<script src="js/modernizr.custom.js"></script>
+	</head>
+	<body>
+		<svg class="hidden">
+			<defs>
+				<path id="tabshape" d="M80,60C34,53.5,64.417,0,0,0v60H80z"/>
+			</defs>
+		</svg>
+		<div class="container">
+			<!-- Top Navigation -->
+			
+			<section>
+				<div class="tabs tabs-style-underline">
+					<nav>
+						<ul>
+							<li><a href="#section-underline-1" class="icon icon-home"><span>Home</span></a></li>
+							<li><a href="#section-underline-2" class="icon icon-gift"><span>Deals</span></a></li>
+							<li><a href="#section-underline-3" class="icon icon-upload"><span>Upload</span></a></li>
+							<li><a href="#section-underline-4" class="icon icon-coffee"><span>Work</span></a></li>
+							<li><a href="#section-underline-5" class="icon icon-config"><span>Settings</span></a></li>
+						</ul>
+					</nav>
+					<div class="content-wrap">
+						<section id="section-underline-1"><p>1</p></section>
+						<section id="section-underline-2"><p>2</p></section>
+						<section id="section-underline-3"><p>3</p></section>
+						<section id="section-underline-4"><p>4</p></section>
+						<section id="section-underline-5"><p>5</p></section>
+					</div><!-- /content -->
+				</div><!-- /tabs -->
+			</section>
+			
+		</div><!-- /container -->
+		<script src="js/cbpFWTabs.js"></script>
+		<script>
+			(function() {
+
+				[].slice.call( document.querySelectorAll( '.tabs' ) ).forEach( function( el ) {
+					new CBPFWTabs( el );
+				});
+
+			})();
+		</script>
+	</body>
+</html>
