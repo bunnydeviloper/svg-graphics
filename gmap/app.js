@@ -7,7 +7,28 @@ function myMap() {
   const googleBldg = new google.maps.LatLng(37.422483, -122.087324);
 
   const mapCanvas = document.getElementById("googleMap");
-  const mapOptions = {center:myCenter, zoom:9};
+  const mapOptions = {
+    center:myCenter,
+    zoom:9,
+    mapTypeId: google.maps.MapTypeId.HYBRID, // photographic map + roads and city names
+    // OR map.setMapTypeId(google.maps.MapTypeId.HYBRID);
+
+    // if you want to turn off default controls: 'diableDefaultUI: true'
+    // whereas turn on all controls:
+    panControl: true,
+    zoomControl: true,
+    zoomControlOptions: {style: google.maps.ZoomControlStyle.SMALL},
+    mapTypeControl: true,
+    mapTypeControlOptions: {
+      style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+      position: google.maps.ControlPosition.TOP_LEFT
+    },
+    scaleControl: true,
+    streetViewControl: true,
+    overviewMapControl: true,
+    rotateControl: true,
+
+  }; 
 
   const map = new google.maps.Map(mapCanvas, mapOptions);
 
