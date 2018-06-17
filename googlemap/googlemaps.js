@@ -1,12 +1,18 @@
 function myMap() {
-  const mapProp= {
-    center:new google.maps.LatLng(37.335942,-121.886908),
-    zoom:10,
-  };
+  const myCenter = new google.maps.LatLng(37.335942, -121.886908);
+  const bigBasin = new google.maps.LatLng(37.172670, -121.221556);
+  const santaCruz = new google.maps.LatLng(36.966560, -122.016581)
 
-  const map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+  const mapCanvas = document.getElementById("googleMap");
+  const mapOptions = {center:myCenter, zoom:10};
+
+  const map = new google.maps.Map(mapCanvas, mapOptions);
+
+  const marker = new google.maps.Marker({
+    position: myCenter,
+    animation: google.maps.Animation.BOUNCE
+  });
+  marker.setMap(map);
 }
 
-const marker = new google.maps.Marker({position: myCenter});
 
-marker.setMap(map);
