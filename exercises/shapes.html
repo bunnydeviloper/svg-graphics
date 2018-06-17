@@ -1,48 +1,63 @@
 <!DOCTYPE html>
 <html>
   <body>
+    <h2>Circle</h2>
+    <svg width="100" height="100">
+      <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
+        <circle cx="50" cy="50" r="20" stroke="green" stroke-width="4" fill="yellow" />
+    </svg>
+    <p>The cx and cy attributes define the x and y coordinates of the center of the circle.</p>
+    <p>If cx and cy are omitted, the circle's center is set to (0,0).</p>
+    <p>The r attribute defines the radius of the circle.</p>
+
+    <h2>Ellipse, similar to Circle, but has rx and ry radius</h2>
+    <svg width="100" height="100">
+      <ellipse cx="50" cy="50" rx="40" ry="30" stroke="black" stroke-width="1" fill="green" />
+        <ellipse cx="40" cy="50" rx="30" ry="20" stroke="black" stroke-width="1" fill="white" />
+    </svg>
+
     <h2>Rectangle</h2>
-    <svg width="400" height="200">
-      <rect x="0" y="0" width="300" height="200" fill="blue" />
-        <rect x="50" y="50" width="200" height="100" fill="white" />
-          <rect x="75" y="75" width="150" height="50" fill="blue" />
+    <svg width="300" height="100">
+      <rect width="80" height="50" x="100" y="0" rx="10" ry="20"
+      style="fill:rgb(0,0,255); stroke:pink; stroke-width:3; fill-opacity:0.2; stroke-opacity: 0.9" />
+    </svg>
+    <p>Use <b>opacity:0.5</b> to set opacity value for the whole element, legal range is 0 to 1</p>
+    <p>The rx and ry attributes rounds the corners of the rectangle</p>
+
+    <h2>Line</h2>
+    <svg height="100" width="100">
+      <line x1="0" y1="0" x2="100" y2="100" style="stroke:rgb(255,0,0); stroke-width:2" />
     </svg>
 
-    <h2>Square with normal/default viewBox: 0 0 100 100, same size as SVG canvas or viewport</h2>
-    <svg width="100" height="100" viewBox="">
-      <rect x="0" y="0" width="100" height="100" fill="red" />
-        <rect x="10" y="10" width="50" height="50" fill="white" />
+    <h2>Polyline</h2>
+    <svg height="100" width="100">
+      <polyline points="0,10 10,10 10,20 20,20 20,30 30,30 30,40 40,50 50,50 50,70 70,70 70,80"
+      style="fill:white; stroke:red; stroke-width:2" />
     </svg>
 
-    <h2>Square with viewBox 1.5 times the size of viewport: 0 0 150 150, zoom out 1.5x</h2> 
-    <svg width="100" height="100" viewBox="0 0 150 150" style="background-color: #ccc">
-      <rect x="0" y="0" width="100" height="100" fill="blue" />
-        <rect x="10" y="10" width="50" height="50" fill="white" />
+    <h2>Polygon, the points attribute defines the x and y coordinates for each corner</h2>
+    <svg height="100" width="100">
+      <polygon points="0,10 20,40 80,50 100,5" style="fill:lime; stroke:purple; stroke-width:1" />
     </svg>
 
-    <h2>Square with cropped viewBox: 0 0 50 50, cropped at the top left corner and zoom in 2x</h2> 
-    <svg width="100" height="100" viewBox="0 0 50 50">
-      <rect x="0" y="0" width="100" height="100" fill="blue" />
-        <rect x="10" y="10" width="50" height="50" fill="white" />
+    <h2>Polygon Star with fill-rule:nonzero AND fill-rule:evenodd</h2>
+    <svg height="100" width="100">
+      <polygon points="50,1 15,90 98,30 1,30 85,90"
+      style="fill:lime; stroke:purple; stroke-width:1; fill-rule:nonzero;" />
+    </svg>
+    <svg height="100" width="100">
+      <polygon points="50,1 15,90 98,30 1,30 85,90"
+      style="fill:lime; stroke:purple; stroke-width:3; fill-rule:evenodd;" />
     </svg>
 
-    <h2>Square with cropped viewBox: 50 50 100 100, cropped at the lower right corner</h2> 
-    <svg style="background-color: #ccc" width="100" height="100" viewBox="50 50 100 100">
-      <rect x="0" y="0" width="100" height="100" fill="blue" />
-        <rect x="10" y="10" width="50" height="50" fill="white" />
+    <h2>Path, each letter has a specific code</h2>
+    <svg height="110" width="100">
+      <path d="M50 0 L75 100 L25 100 Z" />
     </svg>
-        
-    <h2>Square with cropped viewBox in the middle: 25 25 50 50</h2> 
-    <svg width="100" height="100" viewBox="25 25 50 50">
-      <rect x="0" y="0" width="100" height="100" fill="blue" />
-        <rect x="10" y="10" width="50" height="50" fill="white" />
-    </svg>
-        
-    <h2>Square with negative transform viewBox: -25 -25 50 50</h2> 
-    <p>The effect would be similar to <b>transform="translate(25 25)"</b></p>
-    <svg width="100" height="100" viewBox="-25 -25 50 50" style="background-color: #ccc">
-      <rect x="0" y="0" width="100" height="100" fill="blue" />
-        <rect x="10" y="10" width="50" height="50" fill="white" />
+
+    <h2>Text with rotation</h2>
+    <svg height="100" width="100">
+      <text x="0" y="15" fill="red" transform="rotate(30 20,40)">I love SVG</text>
     </svg>
 
   </body>
