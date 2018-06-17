@@ -2,8 +2,9 @@ function myMap() {
   const myCenter = new google.maps.LatLng(37.335942, -121.886908);
   const bigBasin = new google.maps.LatLng(37.172670, -122.221556);
   const santaCruz = new google.maps.LatLng(36.966560, -122.016581);
-
   const myTrip = [myCenter, bigBasin, santaCruz];
+
+  const googleBldg = new google.maps.LatLng(37.422483, -122.087324);
 
   const mapCanvas = document.getElementById("googleMap");
   const mapOptions = {center:myCenter, zoom:9};
@@ -16,13 +17,51 @@ function myMap() {
   });
   marker.setMap(map);
 
+  const infowindow = new google.maps.InfoWindow({content: "Hello World!"});
+
+  google.maps.event.addListener(marker, "click", function() {
+    const currentPos = map.getZoom();
+    map.setZoom(14);
+    map.setCenter(marker.getPosition());
+    window.setTimeout(function() {map.setZoom(currentPos)}, 3000);
+
+    infowindow.open(map, marker);
+  });
+
+  function placeMarker(map, location) {
+    const marker2 = new google.maps.Marker({
+      position: location,
+      map: map
+    });
+    const infowindow2 = new google.maps.InfoWindow({
+      content: 'Latitude: ' + location.lat() +
+      '<br>Longtitude: ' + location.lng()
+    });
+    infowindow2.open(map, marker2);
+  };
+
+  google.maps.event.addListener(map, "click", function(event) {
+    placeMarker(map, event.latLng);
+  });
+
+  const myCity = new google.maps.Circle({
+    center: googleBldg,
+    radius: 8000,
+    strokeColor: "#0000FF",
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: "#0000FF",
+    fillOpacity: 0.4,
+    editable: true,
+  });
+  myCity.setMap(map);
+
   const flightPath = new google.maps.Polyline({
     path: myTrip,
     strokeColor: "#0000FF",
     strokeOpacity: 0.8,
-    strokeWeight: 2
+    strokeWeight: 2,
+    editable: true,
   });
   flightPath.setMap(map);
 }
-
-
