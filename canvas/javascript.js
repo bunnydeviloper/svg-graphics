@@ -9,6 +9,7 @@ function startGame() {
 
 const myGameArea = {
   canvas: document.createElement('canvas'),
+
   start: function() {
     // this.canvas.width = 500; // override the style tag
     // this.canvas.height = 300; // override the style tag
@@ -25,7 +26,13 @@ const myGameArea = {
       myGameArea.keys[e.keyCode] = (e.type == "keydown") // false
     })
 
+    // game control for touch screen devices
+    window.addEventListener('touchmove', function (e) {
+      myGameArea.x = e.touches[0].screenX;
+      myGameArea.y = e.touches[0].screenY;
+    })
   },
+
   clear: function() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   },
@@ -62,6 +69,12 @@ function updateGameArea() {
     if (myGameArea.keys[38]) myGamePiece.speedY = -1;
     if (myGameArea.keys[40]) myGamePiece.speedY = 1;
     myGameArea.keys = []; // soft reset
+  }
+
+  // update game control for touch screen devices
+  if (myGameArea.x && myGameArea.y) {
+    myGamePiece.x = myGameArea.x;
+    myGamePiece.y = myGameArea.y;
   }
 
   myGamePiece.newPos();
