@@ -1,4 +1,5 @@
 window.onload = function() { startGame(); }
+console.log('something');
 
 let myGamePiece; // initialize game piece
 
