@@ -4,7 +4,7 @@ let myGamePiece;
 
 function startGame() {
   myGameArea.start();
-  myGamePiece = new component(30, 30, 'red', 10, 120, 15);
+  myGamePiece = new component(30, 30, 'blue', 10, 120);
 }
 
 const myGameArea = {
@@ -21,28 +21,36 @@ const myGameArea = {
   },
 };
 
-function component(width, height, color, x, y, r) {
+function component(width, height, color, x, y) {
   this.width = width;
   this.height = height;
+  this.speedX = 0;
+  this.speedY = 0;
   this.x = x;
   this.y = y;    
-  this.r = r;
   this.updateRect = function() {
     ctx = myGameArea.context;
     ctx.fillStyle = color;
     ctx.fillRect(this.x, this.y, this.width, this.height);
   };
-  this.updateCircle = function() {
-    ctx = myGameArea.context;
-    ctx.arc(this.x+15, this.y-20, this.r, 0, 2*Math.PI);
-    ctx.fillStyle = "blue";
-    ctx.fill();
-
+  this.newPos = function() {
+    this.x += this.speedX;
+    this.y += this.speedY;
   };
 }
 
 function updateGameArea() {
   myGameArea.clear();
+  myGamePiece.newPos();
   myGamePiece.updateRect();
-  myGamePiece.updateCircle();
+}
+
+function moveup() { myGamePiece.speedY -= 1; }
+function movedown() { myGamePiece.speedY += 1; }
+function moveleft() { myGamePiece.speedX -= 1; }
+function moveright() { myGamePiece.speedX += 1; }
+
+function stopMove() {
+  myGamePiece.speedX = 0;
+  myGamePiece.speedY = 0;
 }
