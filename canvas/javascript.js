@@ -3,10 +3,10 @@ window.onload = function() { startGame(); }
 let myGamePiece; // initialize game piece component
 let myObstacles = [];  // initialize obstacle component, save multiples obs in an array
 
-/* set emoji for drawImage as myGamePiece
+/* set angrybird for drawImage as myGamePiece
 */
-let emoji = new Image();
-emoji.src = "angrybird.png";
+let angrybird = new Image();
+angrybird.src = "angrybird.png";
 
 function startGame() {
   myGamePiece = new component(80, 80, 'blue', 10, 70);
@@ -77,8 +77,11 @@ function component(width, height, color, x, y) {
 
     /* draw using outside image, the image is ugly due to re-scale/size
     */
-    ctx.drawImage(emoji, 0, 0, emoji.width, emoji.height,           // source image
+    ctx.drawImage(angrybird, 0, 0, angrybird.width, angrybird.height,           // source image
                       this.x, this.y, this.width, this.height);     // new coordinate and new size
+    ctx.strokeStyle = "#2bb11b";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(this.x, this.y, this.width, this.height);
   };
   this.updateObs = function() {
     ctx = myGameArea.context;
@@ -112,6 +115,7 @@ function component(width, height, color, x, y) {
   }
 }
 
+// check the current frame number and return true if corresponds with given interval
 // make sure to initialize frameNo in myGameArea.start()
 function everyInterval(n) {
   if ((myGameArea.frameNo / n) % 1 == 0) return true;
@@ -119,21 +123,17 @@ function everyInterval(n) {
 }
 
 function updateGameArea() {
-  let x, y;
-  // Object.keys(myObstacles).forEach( i => { if (myGamePiece.crashWith(myObstacles[i])) myGameArea.stop(); } );
-
-    for (i = 0; i < myObstacles.length; i += 1) {
-        if (myGamePiece.crashWith(myObstacles[i])) {
-            myGameArea.stop();
-            return updateGameArea();
-        } 
-    }
+  // first, loop through every obstacles to see if there's a crash, then stop
+  myObstacles.forEach( e => { if (myGamePiece.crashWith(e)) myGameArea.stop(); } );
+  
+  // otherwise continue the game, continue to count the frame
   myGameArea.clear();
   myGameArea.frameNo += 1;
+  // add new obs at the beginning of game or every 150th frame
   if (myGameArea.frameNo == 1 || everyInterval(150)) {
-      x = myGameArea.canvas.width;
-      y = myGameArea.canvas.height - 200
-      myObstacles.push(new component(10, 200, "green", x, y));
+      const x = myGameArea.canvas.width;
+      const y = myGameArea.canvas.height - 200
+      myObstacles.push(new component(10, 200, "blue", x, y));
   }
   for (i = 0; i < myObstacles.length; i += 1) {
       myObstacles[i].x -= 1; // change pos to move to the left at every update
@@ -154,7 +154,7 @@ function updateGameArea() {
     if (myGameArea.keys[39] || myGameArea.keys[76]) myGamePiece.speedX = 1;
     if (myGameArea.keys[38] || myGameArea.keys[75]) myGamePiece.speedY = -1;
     if (myGameArea.keys[40] || myGameArea.keys[74]) myGamePiece.speedY = 1;
-    if (myGameArea.keys[32]) startGame();
+    // if (myGameArea.keys[32]) startGame(); // space bar doesnt work yet
     myGameArea.keys = []; // soft reset
   }
 
