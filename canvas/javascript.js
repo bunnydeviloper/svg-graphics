@@ -6,10 +6,10 @@ let myObstacles = [];  // initialize obstacle component, save multiples obs in a
 /* set emoji for drawImage as myGamePiece
 */
 let emoji = new Image();
-emoji.src = "emoji.png";
+emoji.src = "angrybird.png";
 
 function startGame() {
-  myGamePiece = new component(20, 20, 'blue', 10, 70);
+  myGamePiece = new component(80, 80, 'blue', 10, 70);
   myGameArea.start();
 }
 
@@ -18,8 +18,8 @@ const myGameArea = {
 
   start: function() {
     this.frameNo = 0; // initialize frame count
-    this.canvas.width = 500; // override the style tag
-    this.canvas.height = 300; // override the style tag
+    this.canvas.width = 600; // override the style tag
+    this.canvas.height = 400; // override the style tag
     this.context = this.canvas.getContext('2d');
     document.body.insertBefore(this.canvas, document.body.childNodes[0]);
     this.interval = setInterval(updateGameArea, 20); // update screen constantly
@@ -123,10 +123,9 @@ function updateGameArea() {
   // Object.keys(myObstacles).forEach( i => { if (myGamePiece.crashWith(myObstacles[i])) myGameArea.stop(); } );
 
     for (i = 0; i < myObstacles.length; i += 1) {
-  console.log(myObstacles.length);
         if (myGamePiece.crashWith(myObstacles[i])) {
             myGameArea.stop();
-            return;
+            return updateGameArea();
         } 
     }
   myGameArea.clear();
@@ -155,6 +154,7 @@ function updateGameArea() {
     if (myGameArea.keys[39] || myGameArea.keys[76]) myGamePiece.speedX = 1;
     if (myGameArea.keys[38] || myGameArea.keys[75]) myGamePiece.speedY = -1;
     if (myGameArea.keys[40] || myGameArea.keys[74]) myGamePiece.speedY = 1;
+    if (myGameArea.keys[32]) startGame();
     myGameArea.keys = []; // soft reset
   }
 
@@ -178,3 +178,6 @@ function stopMove() {
   myGamePiece.speedX = 0;
   myGamePiece.speedY = 0;
 }
+
+// restart game
+function restart() { startGame(); }

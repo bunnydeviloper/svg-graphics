@@ -4,14 +4,17 @@
   <script src="./javascript.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    canvas {
-      background-color: #f1f1f1;
-      border:1px solid #d3d3d3;
+    body {
       width: 100%;
-      height: 50%;
+      text-align: center;
+    }
+    canvas {
+      background-color: #f8fffd;
+      border:1px solid #2bb11b;
     }
     button {
-      background-color: white;
+      background-color: blue;
+      color: white;
       border: 1px solid blue;
       border-radius: 3px;
       font-size: 15px;
@@ -20,11 +23,15 @@
   </head>
 
   <body>
-    <div style="padding-top:10px; text-align:center; width:100%;">
+    <div style="padding-top:10px;">
       <button onmousedown="moveup()" onmouseup="stopMove()" ontouchstart="moveup()">UP</button>
       <button onmousedown="movedown()" onmouseup="stopMove()" ontouchstart="movedown()">DOWN</button>
       <button onmousedown="moveleft()" onmouseup="stopMove()" ontouchstart="moveleft()">LEFT</button>
       <button onmousedown="moveright()" onmouseup="stopMove()" ontouchstart="moveright()">RIGHT</button>
+
+      <button onmousedown="restart()" ontouchstart="restart()" style="background-color: magenta">
+        RESTART (spacebar)
+      </button>
     </div>
     <h1>Canvas Game by Sophia</h1>
 
