@@ -2,9 +2,13 @@ window.onload = function() { startGame(); }
 
 let myGamePiece; // initialize game piece
 
+// set emoji for drawImage
+// let emoji = new Image();
+// emoji.src = "emoji.png";
+
 function startGame() {
   myGameArea.start();
-  myGamePiece = new component(20, 20, 'blue', 10, 70);
+  myGamePiece = new component(10, 10, 'blue', 10, 70);
 }
 
 const myGameArea = {
@@ -27,10 +31,10 @@ const myGameArea = {
     })
 
     // game control for touch screen devices
-    window.addEventListener('touchmove', function (e) {
-      myGameArea.x = e.touches[0].screenX;
-      myGameArea.y = e.touches[0].screenY;
-    })
+    // window.addEventListener('touchmove', function (e) {
+    //   myGameArea.x = e.touches[0].screenX;
+    //  myGameArea.y = e.touches[0].screenY;
+    // })
   },
 
   clear: function() {
@@ -48,8 +52,26 @@ function component(width, height, color, x, y) {
   this.y = y;    
   this.updateRect = function() {
     ctx = myGameArea.context;
+    // draw square
     ctx.fillStyle = color;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+    ctx.rect(this.x, this.y, this.width, this.height);
+    ctx.fill();  // can combine two lines with ctx.fillRect()
+
+    /* circle, cannot use b/c idk how to fix fn myGameArea.clear() w/ clearRect()
+     * // ctx.fillStyle = color;
+     * // ctx.fill();
+     * ctx.linewidth = this.width * 0.1;
+     * ctx.arc(this.x, this.y, this.width / 5, 0, 2*Math.PI);
+     * ctx.lineWidth = 1; // border line
+     * ctx.strokeStyle = color
+     * ctx.stroke();
+     */
+
+    /*
+     * draw using outside image, the image is ugly due to re-scale/size
+     *  ctx.drawImage(emoji, 0, 0, emoji.width, emoji.height,           // source image
+     *                   this.x, this.y, this.width, this.height);   // new coordinate and new size
+     */
   };
   this.newPos = function() {
     this.x += this.speedX;
@@ -72,10 +94,10 @@ function updateGameArea() {
   }
 
   // update game control for touch screen devices
-  if (myGameArea.x && myGameArea.y) {
-    myGamePiece.x = myGameArea.x;
-    myGamePiece.y = myGameArea.y;
-  }
+  // if (myGameArea.x && myGameArea.y) {
+  //  myGamePiece.x = myGameArea.x;
+  //  myGamePiece.y = myGameArea.y;
+  // }
 
   myGamePiece.newPos();
   myGamePiece.updateRect();
