@@ -1,15 +1,17 @@
 window.onload = function() { startGame(); }
 
-let myGamePiece; // initialize game piece component
-let myObstacles = [];  // initialize obstacle component, save multiples obs in an array
+let myGamePiece;        // initialize game piece component
+let myObstacles = [];   // initialize obstacle component, save multiples obs in an array
+let myScore;            // initialize score component
 
-/* set angrybird for drawImage as myGamePiece
+/* set spaceship for drawImage as myGamePiece
 */
-let angrybird = new Image();
-angrybird.src = "angrybird.png";
+let spaceship = new Image();
+spaceship.src = "spaceship.png";
 
 function startGame() {
   myGamePiece = new component(40, 40, 'blue', 10, 70);
+  myScore = new component("30px", "Consolas", "black", 280, 40, "text");
   myGameArea.start();
 }
 
@@ -18,6 +20,7 @@ const myGameArea = {
 
   start: function() {
     this.frameNo = 0; // initialize frame count
+    this.score = -2;   // initialize score to -2 to account for waiting interval at first
     this.canvas.width = 600; // override the style tag
     this.canvas.height = 400; // override the style tag
     this.context = this.canvas.getContext('2d');
@@ -77,7 +80,7 @@ function component(width, height, color, x, y) {
 
     /* draw using outside image, the image is ugly due to re-scale/size
     */
-    ctx.drawImage(angrybird, 0, 0, angrybird.width, angrybird.height,           // source image
+    ctx.drawImage(spaceship, 0, 0, spaceship.width, spaceship.height,           // source image
                       this.x, this.y, this.width, this.height);     // new coordinate and new size
     ctx.strokeStyle = "#2bb11b";
     ctx.lineWidth = 1;
@@ -89,6 +92,12 @@ function component(width, height, color, x, y) {
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.width, this.height);
     // NOTE: must use fillRect, cannot use ctx.rect(...) and ctx.fill();
+  };
+  this.updateScore = function() {
+    ctx = myGameArea.context;
+    ctx.font = this.width + " " + this.height;
+    ctx.fillStyle = color;
+    ctx.fillText(this.text, this.x, this.y);
   };
   this.newPos = function() {
     this.x += this.speedX;
@@ -131,10 +140,13 @@ function updateGameArea() {
   myGameArea.frameNo++;
   // add new obs at the beginning of game or every 150th frame, randomize height and gap
   if (myGameArea.frameNo == 1 || everyInterval(150)) {
+    // TODO: this is temporary solution to update score, more to come...
+    myGameArea.score++;
+
     const minHeight = 20;
     const maxHeight = 200;
     const height = Math.floor(Math.random()*(maxHeight-minHeight+1) + minHeight);
-    const minGap = 50;
+    const minGap = 30;
     const maxGap = 200;
     const gap = Math.floor(Math.random()*(maxGap-minGap+1) + minGap);
     const color = "#"+Math.random().toString(16).slice(-6);   //randomize obstacle colors
@@ -183,6 +195,8 @@ function updateGameArea() {
    * }
    */
 
+  myScore.text = "SCORE: " + myGameArea.score;
+  if (myGameArea.score >= 0) myScore.updateScore();
   myGamePiece.newPos();
   myGamePiece.updateRect();
 }
