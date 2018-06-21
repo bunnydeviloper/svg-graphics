@@ -9,7 +9,7 @@ let angrybird = new Image();
 angrybird.src = "angrybird.png";
 
 function startGame() {
-  myGamePiece = new component(50, 50, 'blue', 10, 70);
+  myGamePiece = new component(40, 40, 'blue', 10, 70);
   myGameArea.start();
 }
 
@@ -124,37 +124,55 @@ function everyInterval(n) {
 
 function updateGameArea() {
   // first, loop through every obstacles to see if there's a crash, then stop
-  myObstacles.forEach( e => { if (myGamePiece.crashWith(e)) myGameArea.stop(); } );
+  myObstacles.forEach(obstacle => { if (myGamePiece.crashWith(obstacle)) myGameArea.stop(); } );
   
   // otherwise continue the game, continue to count the frame
   myGameArea.clear();
-  myGameArea.frameNo += 1;
-  // add new obs at the beginning of game or every 150th frame
+  myGameArea.frameNo++;
+  // add new obs at the beginning of game or every 150th frame, randomize height and gap
   if (myGameArea.frameNo == 1 || everyInterval(150)) {
-      const x = myGameArea.canvas.width;
-      const y = myGameArea.canvas.height - 200
-      myObstacles.push(new component(10, 200, "blue", x, y));
-  }
-  for (i = 0; i < myObstacles.length; i += 1) {
-      myObstacles[i].x -= 1; // change pos to move to the left at every update
-      myObstacles[i].updateObs();
-  }
-  /*
+    const minHeight = 20;
+    const maxHeight = 200;
+    const height = Math.floor(Math.random()*(maxHeight-minHeight+1) + minHeight);
+    const minGap = 50;
+    const maxGap = 200;
+    const gap = Math.floor(Math.random()*(maxGap-minGap+1) + minGap);
+    const color = "#"+Math.random().toString(16).slice(-6);   //randomize obstacle colors
+    const x = myGameArea.canvas.width;
 
-  myGameArea.clear();
-  myObstacles.x--;
-  myObstacles.updateObs();
-  */
+    myObstacles.push(new component(10, height, color, x, 0)); // obstacle on the top
+    myObstacles.push(new component(10, x-height-gap, color, x, height+gap)); // obstacle bottom
+  }
+  myObstacles.forEach(obstacle => {
+      obstacle.x--; // change horizontal pos to move to the left at every update
+      obstacle.updateObs();
+  });
 
   // update game control with keys
   if (myGameArea.keys && myGameArea.keys.length > 0) {
     myGamePiece.speedX = 0;
     myGamePiece.speedY = 0;
-    if (myGameArea.keys[37] || myGameArea.keys[72]) myGamePiece.speedX = -1;
-    if (myGameArea.keys[39] || myGameArea.keys[76]) myGamePiece.speedX = 1;
-    if (myGameArea.keys[38] || myGameArea.keys[75]) myGamePiece.speedY = -1;
-    if (myGameArea.keys[40] || myGameArea.keys[74]) myGamePiece.speedY = 1;
+
+    // press arrow keys or <h, j, k, l> to move left, down, up, right
+    if (myGameArea.keys[37] || myGameArea.keys[72]) myGamePiece.speedX = -2;
+    if (myGameArea.keys[39] || myGameArea.keys[76]) myGamePiece.speedX = 2;
+    if (myGameArea.keys[38] || myGameArea.keys[75]) myGamePiece.speedY = -2;
+    if (myGameArea.keys[40] || myGameArea.keys[74]) myGamePiece.speedY = 2;
+
+    // press <s> to activate bird shrinking functionality
+    // TODO: limit the time you can shrink, or how often you can shrink
+    if (myGameArea.keys[83]) {
+      myGamePiece.height = myGamePiece.height / 2;
+      myGamePiece.width = myGamePiece.width / 2;
+      setTimeout(function() {
+        myGamePiece.height = myGamePiece.height * 2;
+        myGamePiece.width = myGamePiece.width * 2;
+      }, 2000)
+    }
+
+    // TODO: press <spacebar> to restart the game
     // if (myGameArea.keys[32]) startGame(); // space bar doesnt work yet
+
     myGameArea.keys = []; // soft reset
   }
 
@@ -170,10 +188,10 @@ function updateGameArea() {
 }
 
 // game control with buttons
-function moveup() { myGamePiece.speedY -= 1; }
-function movedown() { myGamePiece.speedY += 1; }
-function moveleft() { myGamePiece.speedX -= 1; }
-function moveright() { myGamePiece.speedX += 1; }
+function moveup() { myGamePiece.speedY -= 2; }
+function movedown() { myGamePiece.speedY += 2; }
+function moveleft() { myGamePiece.speedX -= 2; }
+function moveright() { myGamePiece.speedX += 2; }
 function stopMove() {
   myGamePiece.speedX = 0;
   myGamePiece.speedY = 0;
