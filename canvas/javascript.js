@@ -4,8 +4,21 @@ let myGamePiece;        // initialize game piece component
 let myObstacles = [];   // initialize obstacle component, save multiples obs in an array
 let myScore;            // initialize score component
 
+/* TODO: for user to select diff. avatar -> doesn't work yet, not sure why...
+const pickAvatar(id) => {
+  let avatar = document.getElementbyId(id);
+  avatar.addEventListener("click", startGame(id));
+};
+
+window.onload = function() {
+document.getElementById('spaceship').onclick = function() { startGame('spaceship.png'); };
+document.getElementById('mangocat').onclick = function() { startGame('catreading.jpg'); };
+document.getElementById('pusheen').onclick = function() { startGame('pusheenlazy.gif'); };
+}
+*/
+
 function startGame() {
-  myGamePiece = new component(40, 40, 'catreading.jpg', 10, 70, "image");
+  myGamePiece = new component(40, 40, 'pusheenlazy.gif', 10, 70, "image");
   myScore = new component("20px", "Consolas", "black", 480, 40, "text");
   myGameArea.start();
 }
@@ -89,7 +102,7 @@ function component(width, height, color, x, y, type) {
      ctx.linewidth = this.width * 0.1;
      ctx.arc(this.x, this.y, this.width / 5, 0, 2*Math.PI);
      ctx.lineWidth = 1; // border line
-     ctx.strokeStyle = color
+     ctx.strokeStyle = this.color;
      ctx.stroke();
     }
   };
@@ -195,7 +208,7 @@ function updateGameArea() {
 
 // game control with buttons
 function move(direction) {
-  myGamePiece.image.src = "catdriving.jpg";
+  myGamePiece.image.src = "pusheendriving.gif";
   if (direction == "up") myGamePiece.speedY -= 2;
   if (direction == "down") myGamePiece.speedY += 2;
   if (direction == "left") myGamePiece.speedX -= 2;
@@ -211,7 +224,7 @@ function move(direction) {
 }
 
 function stopMove() {
-  myGamePiece.image.src = "catreading.jpg";
+  myGamePiece.image.src = "pusheenlazy.gif";
   myGamePiece.speedX = 0;
   myGamePiece.speedY = 0;
 }
