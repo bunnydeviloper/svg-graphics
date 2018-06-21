@@ -4,14 +4,9 @@ let myGamePiece;        // initialize game piece component
 let myObstacles = [];   // initialize obstacle component, save multiples obs in an array
 let myScore;            // initialize score component
 
-/* set spaceship for drawImage as myGamePiece
-*/
-let spaceship = new Image();
-spaceship.src = "spaceship.png";
-
 function startGame() {
-  myGamePiece = new component(40, 40, 'blue', 10, 70);
-  myScore = new component("20px", "Consolas", "black", 400, 40, "text");
+  myGamePiece = new component(40, 40, 'catreading.jpg', 10, 70, "image");
+  myScore = new component("20px", "Consolas", "black", 480, 40, "text");
   myGameArea.start();
 }
 
@@ -52,7 +47,13 @@ const myGameArea = {
 };
 
 // constructor function for canvas element
-function component(width, height, color, x, y) {
+function component(width, height, color, x, y, type) {
+  this.type = type;
+  if (type == "image") {
+    this.image = new Image();
+    this.image.src = color;
+  }
+
   this.width = width;
   this.height = height;
   this.speedX = 0;
@@ -60,44 +61,37 @@ function component(width, height, color, x, y) {
   this.color = color;
   this.x = x;
   this.y = y;    
-  this.updateRect = function() {
+  this.update = function() {
     ctx = myGameArea.context;
-    /* draw square
-    ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
-    // NOTE: must use fillRect, cannot use ctx.rect(...) and ctx.fill();
-    */
 
-    /* circle, cannot use b/c idk how to fix fn myGameArea.clear() w/ clearRect()
-     * // ctx.fillStyle = color;
-     * // ctx.fill();
-     * ctx.linewidth = this.width * 0.1;
-     * ctx.arc(this.x, this.y, this.width / 5, 0, 2*Math.PI);
-     * ctx.lineWidth = 1; // border line
-     * ctx.strokeStyle = color
-     * ctx.stroke();
-     */
+    /* draw using outside image, the image is ugly due to re-scale/size */
+    if (type == "image") {
+      ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+      ctx.strokeStyle = "#2bb11b";  // for border
+      ctx.lineWidth = 1;
+      ctx.strokeRect(this.x, this.y, this.width, this.height);
+    }
+    if (type == "piece" || type == "obstacles") {
+      ctx.fillStyle = this.color;
+      ctx.fillRect(this.x, this.y, this.width, this.height);
+      // NOTE: must use fillRect, cannot use ctx.rect(...) and ctx.fill();
+    }
+    if (type == "text") {
+      ctx.font = this.width + " " + this.height;
+      ctx.fillStyle = color;
+      ctx.fillText(this.text, this.x, this.y);
+    }
 
-    /* draw using outside image, the image is ugly due to re-scale/size
-    */
-    ctx.drawImage(spaceship, 0, 0, spaceship.width, spaceship.height,           // source image
-                      this.x, this.y, this.width, this.height);     // new coordinate and new size
-    ctx.strokeStyle = "#2bb11b";
-    ctx.lineWidth = 1;
-    ctx.strokeRect(this.x, this.y, this.width, this.height);
-  };
-  this.updateObs = function() {
-    ctx = myGameArea.context;
-    // draw square
-    ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
-    // NOTE: must use fillRect, cannot use ctx.rect(...) and ctx.fill();
-  };
-  this.updateScore = function() {
-    ctx = myGameArea.context;
-    ctx.font = this.width + " " + this.height;
-    ctx.fillStyle = color;
-    ctx.fillText(this.text, this.x, this.y);
+    /* circle: currently cannot use b/c idk how to fix trailing path w/ clearRect() */
+    if (type == "circle") {
+     // ctx.fillStyle = this.color;
+     // ctx.fill();
+     ctx.linewidth = this.width * 0.1;
+     ctx.arc(this.x, this.y, this.width / 5, 0, 2*Math.PI);
+     ctx.lineWidth = 1; // border line
+     ctx.strokeStyle = color
+     ctx.stroke();
+    }
   };
   this.newPos = function() {
     this.x += this.speedX;
@@ -152,20 +146,20 @@ function updateGameArea() {
     const color = "#"+Math.random().toString(16).slice(-6);   //randomize obstacle colors
     const x = myGameArea.canvas.width;
 
-    myObstacles.push(new component(10, height, color, x, 0)); // obstacle on the top
-    myObstacles.push(new component(10, x-height-gap, color, x, height+gap)); // obstacle bottom
+    myObstacles.push(new component(10, height, color, x, 0, "obstacles")); // obstacle on the top
+    myObstacles.push(new component(10, x-height-gap, color, x, height+gap, "obstacles")); // obs bottom
   }
 
   // after clearing canvas and push new obstacle to array, move obstacles leftward at interval
   myObstacles.forEach(obstacle => {
       obstacle.x--; // same as 'obstacle.speedX = -1;' and 'obstacle.newPos();'
-      obstacle.updateObs();
+      obstacle.update(); // display obstacles
   });
 
   myScore.text = "SCORE: " + myGameArea.score;
-  if (myGameArea.score >= 0) myScore.updateScore();
+  if (myGameArea.score >= 0) myScore.update(); // display score starting from 0
   myGamePiece.newPos();
-  myGamePiece.updateRect();
+  myGamePiece.update();
 
   // extra feature to update game control with keys
   if (myGameArea.keys && myGameArea.keys.length > 0) {
@@ -173,27 +167,23 @@ function updateGameArea() {
     myGamePiece.speedY = 0;
 
     // press arrow keys or <h, j, k, l> to move left, down, up, right
-    if (myGameArea.keys[37] || myGameArea.keys[72]) myGamePiece.speedX = -2;
-    if (myGameArea.keys[39] || myGameArea.keys[76]) myGamePiece.speedX = 2;
-    if (myGameArea.keys[38] || myGameArea.keys[75]) myGamePiece.speedY = -2;
-    if (myGameArea.keys[40] || myGameArea.keys[74]) myGamePiece.speedY = 2;
+    if (myGameArea.keys[38] || myGameArea.keys[75]) move('up');
+    if (myGameArea.keys[40] || myGameArea.keys[74]) move('down');
+    if (myGameArea.keys[37] || myGameArea.keys[72]) move('left');
+    if (myGameArea.keys[39] || myGameArea.keys[76]) move('right');
 
     // press <s> to activate bird shrinking functionality
     // TODO: limit the time you can shrink, or how often you can shrink
-    if (myGameArea.keys[83]) {
-      myGamePiece.height = myGamePiece.height / 2;
-      myGamePiece.width = myGamePiece.width / 2;
-      setTimeout(function() {
-        myGamePiece.height = myGamePiece.height * 2;
-        myGamePiece.width = myGamePiece.width * 2;
-      }, 2000)
-    }
+    // TODO: also, add this as a button
+    if (myGameArea.keys[83]) move('shrink');
+    
 
     // TODO: press <spacebar> to restart the game
     // if (myGameArea.keys[32]) startGame(); // space bar doesnt work yet
 
     myGameArea.keys = []; // soft reset
   }
+  window.onkeyup = function() { stopMove(); }
 
   /* update game control for touch screen devices
    * if (myGameArea.x && myGameArea.y) {
@@ -204,11 +194,24 @@ function updateGameArea() {
 }
 
 // game control with buttons
-function moveup() { myGamePiece.speedY -= 2; }
-function movedown() { myGamePiece.speedY += 2; }
-function moveleft() { myGamePiece.speedX -= 2; }
-function moveright() { myGamePiece.speedX += 2; }
+function move(direction) {
+  myGamePiece.image.src = "catdriving.jpg";
+  if (direction == "up") myGamePiece.speedY -= 2;
+  if (direction == "down") myGamePiece.speedY += 2;
+  if (direction == "left") myGamePiece.speedX -= 2;
+  if (direction == "right") myGamePiece.speedX += 2;
+  if (direction == "shrink") {
+    myGamePiece.height = myGamePiece.height / 2;
+    myGamePiece.width = myGamePiece.width / 2;
+    setTimeout(function() {
+      myGamePiece.height = myGamePiece.height * 2;
+      myGamePiece.width = myGamePiece.width * 2;
+    }, 2000)
+  }
+}
+
 function stopMove() {
+  myGamePiece.image.src = "catreading.jpg";
   myGamePiece.speedX = 0;
   myGamePiece.speedY = 0;
 }

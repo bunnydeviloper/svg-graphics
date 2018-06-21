@@ -18,23 +18,37 @@
       border-radius: 3px;
       font-size: 15px;
     }
+    img {
+      width: 80px;
+      height: 80px;
+      cursor: pointer;
+    }
   </style>
   </head>
 
   <body>
     <div style="padding-top:10px;">
-      <button onmousedown="moveup()" onmouseup="stopMove()" ontouchstart="moveup()">UP</button>
-      <button onmousedown="movedown()" onmouseup="stopMove()" ontouchstart="movedown()">DOWN</button>
-      <button onmousedown="moveleft()" onmouseup="stopMove()" ontouchstart="moveleft()">LEFT</button>
-      <button onmousedown="moveright()" onmouseup="stopMove()" ontouchstart="moveright()">RIGHT</button>
+      <img id="spaceship" src="spaceship.png" />
+      <img id="mangocat" src="catdriving.jpg" />
+      <img id="pusheen" src="pusheendriving.gif" />
+      <p>Change Game Avatar By Clicking Above Images</p>
+    </div>
+
+    <div style="padding-top:10px;">
+      <button onmousedown="move('shrink')" onmouseup="stopMove()" ontouchstart="move('shrink')">Shrink</button>
+
+      <button onmousedown="move('up')" onmouseup="stopMove()" ontouchstart="move('up')">UP</button>
+      <button onmousedown="move('down')" onmouseup="stopMove()" ontouchstart="move('down')">DOWN</button>
+      <button onmousedown="move('left')" onmouseup="stopMove()" ontouchstart="move('left')">LEFT</button>
+      <button onmousedown="move('right')" onmouseup="stopMove()" ontouchstart="move('right')">RIGHT</button>
 
       <button onmousedown="restart()" ontouchstart="restart()" style="background-color: magenta">
         RESTART (spacebar)
       </button>
     </div>
-    <h1>Spaceship Flying with SVG Graphics by Sophia</h1>
+    <h1>Antmant Spaceship with SVG Graphics by Sophia</h1>
     <p>Ship Name: SERENITY, inspired by the movie series Firefly</p>
-    <p>Captain: the awesome person behind the monitor, AKA YOU</p>
+    <p>Captain: Antman Version Two Point Oh-Ant-Gee</p>
     <h2 style="color:red">Avoid obstacles at all cost</h2>
     <p>Use buttons, arrow keys, or hjkl to move around</p>
     <p>HINT: press 's' to shrink the ship, it will revert back to original after 2 seconds</p>
