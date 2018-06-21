@@ -14,12 +14,12 @@ const pickAvatar(id) => {
 window.onload = function() {
 document.getElementById('spaceship').onclick = function() { startGame('spaceship.png'); };
 document.getElementById('mangocat').onclick = function() { startGame('catreading.jpg'); };
-document.getElementById('pusheen').onclick = function() { startGame('pusheenlazy.gif'); };
+document.getElementById('pusheen').onclick = function() { startGame('angrybird.png'); };
 }
 */
 
 function startGame() {
-  myGamePiece = new component(40, 40, 'pusheenlazy.gif', 10, 70, "image");
+  myGamePiece = new component(40, 40, 'angrybird.png', 10, 70, "image");
   myScore = new component("20px", "Consolas", "black", 480, 40, "text");
   myBackground = new component(699, 410, 'background.jpg', -5, 0, "background");
   myGameArea.start();
@@ -71,6 +71,7 @@ function component(width, height, color, x, y, type) {
 
   this.width = width;
   this.height = height;
+  this.angle = 0;
   this.speedX = 0;
   this.speedY = 0;
   this.gravity = 0.05;
@@ -84,21 +85,32 @@ function component(width, height, color, x, y, type) {
 
     /* draw using outside image, the image is ugly due to re-scale/size */
     if (type == "image" || type == "background") {
-      ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-      if (type == "image") {
-        ctx.strokeStyle = "#2bb11b";  // for border
-        ctx.lineWidth = 1;
-        ctx.strokeRect(this.x, this.y, this.width, this.height);
-      }
-      // Add a second background after the first background
       if (type == "background") {
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+        // Add a second background after the first background
         ctx.drawImage(this.image, this.x + this.width, this.y, this.width, this.height);
+      }
+      if (type == "image") {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.drawImage(this.image, this.width/-2, this.height/-2, this.width, this.height);
+        ctx.restore();
       }
     }
     if (type == "piece" || type == "obstacles") {
+      if (type == "piece") {
+      
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.angle);
+      ctx.fillStyle = this.color;
+      ctx.fillRect(this.width / -2, this.height / -2, this.width, this.height);
+      // NOTE: must use fillRect, cannot use ctx.rect(...) and ctx.fill();
+      ctx.restore();
+      }
       ctx.fillStyle = this.color;
       ctx.fillRect(this.x, this.y, this.width, this.height);
-      // NOTE: must use fillRect, cannot use ctx.rect(...) and ctx.fill();
     }
     if (type == "text") {
       ctx.font = this.width + " " + this.height;
@@ -201,6 +213,8 @@ function updateGameArea() {
 
   myScore.text = "SCORE: " + myGameArea.score;
   if (myGameArea.score >= 0) myScore.update(); // display score starting from 0
+
+  myGamePiece.angle += 1 * Math.PI / 180;
   myGamePiece.newPos();
   myGamePiece.update();
 
@@ -210,10 +224,7 @@ function updateGameArea() {
     myGamePiece.speedY = 0;
 
     // press arrow keys or <h, j, k, l> to move left, down, up, right
-    if (myGameArea.keys[38] || myGameArea.keys[75]) {
-      accelerate(-0.1);
-      move('up');
-    }
+    if (myGameArea.keys[38] || myGameArea.keys[75]) move('up');
     if (myGameArea.keys[40] || myGameArea.keys[74]) move('down');
     if (myGameArea.keys[37] || myGameArea.keys[72]) move('left');
     if (myGameArea.keys[39] || myGameArea.keys[76]) move('right');
@@ -229,10 +240,7 @@ function updateGameArea() {
 
     myGameArea.keys = []; // soft reset
   }
-  window.onkeyup = function() {
-    stopMove();
-    accelerate(0.02);
-  }
+  window.onkeyup = function() { stopMove(); }
 
   /* update game control for touch screen devices
    * if (myGameArea.x && myGameArea.y) {
@@ -244,8 +252,11 @@ function updateGameArea() {
 
 // game control with buttons
 function move(direction) {
-  myGamePiece.image.src = "pusheendriving.gif";
-  if (direction == "up") myGamePiece.speedY -= 2;
+  myGamePiece.image.src = "angrybird2.jpg";
+  if (direction == "up") {
+    myGamePiece.speedY -= 2;
+    accelerate(-0.1);
+  }
   if (direction == "down") myGamePiece.speedY += 2;
   if (direction == "left") myGamePiece.speedX -= 2;
   if (direction == "right") myGamePiece.speedX += 2;
@@ -260,7 +271,8 @@ function move(direction) {
 }
 
 function stopMove() {
-  myGamePiece.image.src = "pusheenlazy.gif";
+  accelerate(0.02);
+  myGamePiece.image.src = "angrybird.png";
   myGamePiece.speedX = 0;
   myGamePiece.speedY = 0;
 }
