@@ -14,12 +14,14 @@ const pickAvatar(id) => {
 window.onload = function() {
 document.getElementById('spaceship').onclick = function() { startGame('spaceship.png'); };
 document.getElementById('mangocat').onclick = function() { startGame('catreading.jpg'); };
-document.getElementById('pusheen').onclick = function() { startGame('angrybird.png'); };
+document.getElementById('pusheen').onclick = function() { startGame('angrybird2.jpg'); };
 }
 */
 
 function startGame() {
-  myGamePiece = new component(40, 40, 'angrybird.png', 10, 70, "image");
+  myGamePiece = new component(40, 40, 'angrybird2.jpg', 10, 70, "image");
+  // myGamePiece = new component(40, 40, 'blue', 10, 70, "piece");
+
   myScore = new component("20px", "Consolas", "black", 480, 40, "text");
   myBackground = new component(699, 410, 'background.jpg', -5, 0, "background");
   myGameArea.start();
@@ -84,23 +86,19 @@ function component(width, height, color, x, y, type) {
     ctx = myGameArea.context;
 
     /* draw using outside image, the image is ugly due to re-scale/size */
-    if (type == "image" || type == "background") {
-      if (type == "background") {
-        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-        // Add a second background after the first background
-        ctx.drawImage(this.image, this.x + this.width, this.y, this.width, this.height);
-      }
-      if (type == "image") {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.angle);
-        ctx.drawImage(this.image, this.width/-2, this.height/-2, this.width, this.height);
-        ctx.restore();
-      }
+    if (type == "background") {
+      ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+      // Add a second background after the first background
+      ctx.drawImage(this.image, this.x + this.width, this.y, this.width, this.height);
     }
-    if (type == "piece" || type == "obstacles") {
-      if (type == "piece") {
-      
+    if (type == "image") {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.angle);
+      ctx.drawImage(this.image, this.width/-2, this.height/-2, this.width, this.height);
+      ctx.restore();
+    }
+    if (type == "piece") {
       ctx.save();
       ctx.translate(this.x, this.y);
       ctx.rotate(this.angle);
@@ -108,7 +106,8 @@ function component(width, height, color, x, y, type) {
       ctx.fillRect(this.width / -2, this.height / -2, this.width, this.height);
       // NOTE: must use fillRect, cannot use ctx.rect(...) and ctx.fill();
       ctx.restore();
-      }
+    }
+    if (type == "obstacles") {
       ctx.fillStyle = this.color;
       ctx.fillRect(this.x, this.y, this.width, this.height);
     }
@@ -231,7 +230,6 @@ function updateGameArea() {
 
     // press <s> to activate bird shrinking functionality
     // TODO: limit the time you can shrink, or how often you can shrink
-    // TODO: also, add this as a button
     if (myGameArea.keys[83]) move('shrink');
     
 
@@ -252,7 +250,7 @@ function updateGameArea() {
 
 // game control with buttons
 function move(direction) {
-  myGamePiece.image.src = "angrybird2.jpg";
+  if (myGamePiece.type == "image") myGamePiece.image.src = "angrybird.png";
   if (direction == "up") {
     myGamePiece.speedY -= 2;
     accelerate(-0.1);
@@ -272,7 +270,7 @@ function move(direction) {
 
 function stopMove() {
   accelerate(0.02);
-  myGamePiece.image.src = "angrybird.png";
+  if (myGamePiece.type == "image") myGamePiece.image.src = "angrybird2.jpg";
   myGamePiece.speedX = 0;
   myGamePiece.speedY = 0;
 }
