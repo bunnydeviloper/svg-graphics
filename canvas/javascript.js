@@ -9,7 +9,7 @@ let angrybird = new Image();
 angrybird.src = "angrybird.png";
 
 function startGame() {
-  myGamePiece = new component(80, 80, 'blue', 10, 70);
+  myGamePiece = new component(50, 50, 'blue', 10, 70);
   myGameArea.start();
 }
 
