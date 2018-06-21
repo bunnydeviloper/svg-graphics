@@ -11,7 +11,7 @@ spaceship.src = "spaceship.png";
 
 function startGame() {
   myGamePiece = new component(40, 40, 'blue', 10, 70);
-  myScore = new component("30px", "Consolas", "black", 280, 40, "text");
+  myScore = new component("20px", "Consolas", "black", 400, 40, "text");
   myGameArea.start();
 }
 
@@ -155,12 +155,19 @@ function updateGameArea() {
     myObstacles.push(new component(10, height, color, x, 0)); // obstacle on the top
     myObstacles.push(new component(10, x-height-gap, color, x, height+gap)); // obstacle bottom
   }
+
+  // after clearing canvas and push new obstacle to array, move obstacles leftward at interval
   myObstacles.forEach(obstacle => {
-      obstacle.x--; // change horizontal pos to move to the left at every update
+      obstacle.x--; // same as 'obstacle.speedX = -1;' and 'obstacle.newPos();'
       obstacle.updateObs();
   });
 
-  // update game control with keys
+  myScore.text = "SCORE: " + myGameArea.score;
+  if (myGameArea.score >= 0) myScore.updateScore();
+  myGamePiece.newPos();
+  myGamePiece.updateRect();
+
+  // extra feature to update game control with keys
   if (myGameArea.keys && myGameArea.keys.length > 0) {
     myGamePiece.speedX = 0;
     myGamePiece.speedY = 0;
@@ -194,11 +201,6 @@ function updateGameArea() {
    *  myGamePiece.y = myGameArea.y;
    * }
    */
-
-  myScore.text = "SCORE: " + myGameArea.score;
-  if (myGameArea.score >= 0) myScore.updateScore();
-  myGamePiece.newPos();
-  myGamePiece.updateRect();
 }
 
 // game control with buttons
