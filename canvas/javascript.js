@@ -3,6 +3,7 @@ window.onload = function() { startGame(); }
 let myGamePiece;        // initialize game piece component
 let myObstacles = [];   // initialize obstacle component, save multiples obs in an array
 let myScore;            // initialize score component
+let myBackground;         // initialize background component
 
 /* TODO: for user to select diff. avatar -> doesn't work yet, not sure why...
 const pickAvatar(id) => {
@@ -20,6 +21,7 @@ document.getElementById('pusheen').onclick = function() { startGame('pusheenlazy
 function startGame() {
   myGamePiece = new component(40, 40, 'pusheenlazy.gif', 10, 70, "image");
   myScore = new component("20px", "Consolas", "black", 480, 40, "text");
+  myBackground = new component(699, 410, 'background.jpg', -5, 0, "background");
   myGameArea.start();
 }
 
@@ -62,7 +64,7 @@ const myGameArea = {
 // constructor function for canvas element
 function component(width, height, color, x, y, type) {
   this.type = type;
-  if (type == "image") {
+  if (type == "image" || type == "background") {
     this.image = new Image();
     this.image.src = color;
   }
@@ -71,6 +73,9 @@ function component(width, height, color, x, y, type) {
   this.height = height;
   this.speedX = 0;
   this.speedY = 0;
+  this.gravity = 0.05;
+  this.gravitySpeed = 0;
+  this.bounce = 0.6;
   this.color = color;
   this.x = x;
   this.y = y;    
@@ -78,11 +83,17 @@ function component(width, height, color, x, y, type) {
     ctx = myGameArea.context;
 
     /* draw using outside image, the image is ugly due to re-scale/size */
-    if (type == "image") {
+    if (type == "image" || type == "background") {
       ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-      ctx.strokeStyle = "#2bb11b";  // for border
-      ctx.lineWidth = 1;
-      ctx.strokeRect(this.x, this.y, this.width, this.height);
+      if (type == "image") {
+        ctx.strokeStyle = "#2bb11b";  // for border
+        ctx.lineWidth = 1;
+        ctx.strokeRect(this.x, this.y, this.width, this.height);
+      }
+      // Add a second background after the first background
+      if (type == "background") {
+        ctx.drawImage(this.image, this.x + this.width, this.y, this.width, this.height);
+      }
     }
     if (type == "piece" || type == "obstacles") {
       ctx.fillStyle = this.color;
@@ -107,8 +118,20 @@ function component(width, height, color, x, y, type) {
     }
   };
   this.newPos = function() {
+    this.gravitySpeed += this.gravity;
     this.x += this.speedX;
-    this.y += this.speedY;
+    this.y += this.speedY + this.gravitySpeed*0.5;
+    if (this.type == "background") {
+      if (this.x == -(this.width)) this.x = 0; // if reach the end of image, rewind
+    }
+    this.hitBottom();
+  };
+  this.hitBottom = function() {
+    const rockbottom = myGameArea.canvas.height - this.height;
+    if (this.y > rockbottom) {
+      this.y = rockbottom;
+      this.gravitySpeed = -(this.gravitySpeed * this.bounce);
+    }
   };
   this.crashWith = function(otherobj) {
     const myleft = this.x;
@@ -138,15 +161,22 @@ function everyInterval(n) {
   return false;
 }
 
+function accelerate(n) { myGamePiece.gravity = n }
+
 function updateGameArea() {
   // first, loop through every obstacles to see if there's a crash, then stop
   myObstacles.forEach(obstacle => { if (myGamePiece.crashWith(obstacle)) myGameArea.stop(); } );
   
   // otherwise continue the game, continue to count the frame
   myGameArea.clear();
+
+  myBackground.speedX = -1;
+  myBackground.newPos();
+  myBackground.update();
+
   myGameArea.frameNo++;
   // add new obs at the beginning of game or every 150th frame, randomize height and gap
-  if (myGameArea.frameNo == 1 || everyInterval(150)) {
+  if (myGameArea.frameNo == 1 || everyInterval(250)) {
     // TODO: this is temporary solution to update score, more to come...
     myGameArea.score++;
 
@@ -180,7 +210,10 @@ function updateGameArea() {
     myGamePiece.speedY = 0;
 
     // press arrow keys or <h, j, k, l> to move left, down, up, right
-    if (myGameArea.keys[38] || myGameArea.keys[75]) move('up');
+    if (myGameArea.keys[38] || myGameArea.keys[75]) {
+      accelerate(-0.1);
+      move('up');
+    }
     if (myGameArea.keys[40] || myGameArea.keys[74]) move('down');
     if (myGameArea.keys[37] || myGameArea.keys[72]) move('left');
     if (myGameArea.keys[39] || myGameArea.keys[76]) move('right');
@@ -196,7 +229,10 @@ function updateGameArea() {
 
     myGameArea.keys = []; // soft reset
   }
-  window.onkeyup = function() { stopMove(); }
+  window.onkeyup = function() {
+    stopMove();
+    accelerate(0.02);
+  }
 
   /* update game control for touch screen devices
    * if (myGameArea.x && myGameArea.y) {
