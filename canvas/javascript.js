@@ -81,7 +81,7 @@ function component(width, height, color, x, y, type) {
   this.bounce = 0.6;
   this.color = color;
   this.x = x;
-  this.y = y;    
+  this.y = y;
   this.update = function() {
     ctx = myGameArea.context;
 
@@ -102,9 +102,9 @@ function component(width, height, color, x, y, type) {
       ctx.save();
       ctx.translate(this.x, this.y);
       ctx.rotate(this.angle);
+      // NOTE: must use fillRect, cannot use ctx.rect(...) and ctx.fill();
       ctx.fillStyle = this.color;
       ctx.fillRect(this.width / -2, this.height / -2, this.width, this.height);
-      // NOTE: must use fillRect, cannot use ctx.rect(...) and ctx.fill();
       ctx.restore();
     }
     if (type == "obstacles") {
