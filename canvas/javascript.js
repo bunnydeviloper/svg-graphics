@@ -1,4 +1,4 @@
-// window.onload = function() { startGame(); }
+window.onload = function() { startGame(); }
 
 let myGamePiece;        // initialize game piece component
 let myObstacles = [];   // initialize obstacle component, save multiples obs in an array
@@ -7,7 +7,7 @@ let myBackground;       // initialize background component
 let mySound;            // initialize sound component
 let myMusic;            // initialize sound component for background music
 
-/* TODO: for user to select diff. avatar -> doesn't work yet, not sure why...
+/* TODO: for user to select diff. avatar -> doesn't work yet
 const pickAvatar(id) => {
   let avatar = document.getElementbyId(id);
   avatar.addEventListener("click", startGame(id));
@@ -21,13 +21,11 @@ document.getElementById('pusheen').onclick = function() { startGame('angrybird2.
 */
 
 function startGame() {
- // myGameArea.reset();
-  myGamePiece = new component(40, 40, 'angrybird2.jpg', 10, 70, "image");
-  // myGamePiece = new component(40, 40, 'blue', 10, 70, "piece");
+  myGamePiece = new component(40, 40, 'angrybird2.jpg', 10, 70, "image"); // use image
+  // myGamePiece = new component(40, 40, 'blue', 10, 70, "piece"); // use little square
 
   myScore = new component("20px", "Consolas", "black", 480, 40, "text");
   myBackground = new component(699, 410, 'background.jpg', -5, 0, "background");
-
   mySound = new sound("gunhit.mp3");
   myMusic = new sound("candycrush.mp3", "background");
   myMusic.play();
@@ -37,7 +35,6 @@ function startGame() {
 
 const myGameArea = {
   canvas: document.createElement('canvas'),
-
   start: function() {
     this.frameNo = 0; // initialize frame count
     this.score = -2;   // initialize score to -2 to account for waiting interval at first
@@ -69,11 +66,13 @@ const myGameArea = {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   },
   stop: function() { clearInterval(this.interval); }, // stop the game if user hit the obstacles
+  /* TODO: need to work on this reset, restart...
   reset: function() {
     myGamePiece = undefined;
     myObstacles = [];
     myScore = "";
   },
+  */
 };
 
 // constructor function for canvas element
@@ -89,6 +88,7 @@ function component(width, height, color, x, y, type) {
   this.speedX = 2;
   this.speedY = 2;
   this.angle = 0;
+  this.moveAngle = 1;
   this.gravity = 0.05;
   this.gravitySpeed = 0.1;
   this.bounce = 0.6; // 0 means no bounce, 1 means bounce back to where it start falling
@@ -98,7 +98,6 @@ function component(width, height, color, x, y, type) {
   this.update = function() {
     ctx = myGameArea.context;
 
-    /* draw using outside image, the image is ugly due to re-scale/size */
     if (type == "background") {
       ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
       // Add a second background after the first background
@@ -106,15 +105,14 @@ function component(width, height, color, x, y, type) {
     }
     if (type == "image") {
       // draw image as regular square, no rotate
-      ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+      // ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
 
-      /* currently rotation works but it create a gap when hitting objects
+      /* TODO: currently rotation works but it create a gap when hitting objects */
       ctx.save();
       ctx.translate(this.x, this.y);
       ctx.rotate(this.angle);
       ctx.drawImage(this.image, this.x/-2, this.y/-2, this.width, this.height);
       ctx.restore();
-      */
     }
     if (type == "piece") {
       ctx.save();
@@ -152,10 +150,17 @@ function component(width, height, color, x, y, type) {
       if (this.x == -(this.width)) this.x = 0; // if reach the end of image, rewind
     } else {
     this.gravitySpeed += this.gravity;
-    // this.x += this.speedX;
+    this.x += this.speedX;
     // this.y += this.speedY + this.gravitySpeed;
-    this.x += this.speedX + this.gravitySpeed*0.1;
+
+    // this.x += this.speedX + this.gravitySpeed*0.5;
     this.y += this.speedY + this.gravitySpeed*0.5;
+
+    /*
+    this.angle += this.moveAngle * Math.PI / 180;
+    this.x += this.speedX*Math.sin(this.angle);
+    this.y -= this.speedY*Math.cos(this.angle);
+    */
     }
 
     this.hitEdge();
@@ -267,7 +272,7 @@ function updateGameArea() {
   myScore.text = "SCORE: " + myGameArea.score;
   if (myGameArea.score >= 0) myScore.update(); // display score starting from 0
 
-  myGamePiece.angle += 2 * Math.PI / 180;
+  myGamePiece.angle += 1 * Math.PI / 180;
   myGamePiece.newPos();
   myGamePiece.update();
 
