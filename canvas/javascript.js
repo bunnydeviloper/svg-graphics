@@ -86,7 +86,7 @@ function component(width, height, color, x, y, type) {
   this.speedX = 0;
   this.speedY = 0;
   this.angle = 0;
-  // this.moveAngle = 1;
+  this.moveAngle = 1;
   this.gravity = 0.05;
   this.gravitySpeed = 0;
   this.bounce = 0.6; // 0 means no bounce, 1 means bounce back to where it start falling
@@ -146,22 +146,20 @@ function component(width, height, color, x, y, type) {
   };
   this.newPos = function() {
     if (this.type == "background") {
-      // this.x += this.speedX;
-      // this.y += this.speedY;
-      console.log(this.type);
-      if (this.x == -(this.width)) { this.x = 0; } // if reach the end of image, rewind
-    }
+       this.x += this.speedX;
+      if (this.x == -(this.width)) {
+        this.x = 0;
+      } // if reach the end of image, rewind
+    } else {
     this.gravitySpeed += this.gravity;
-    // this.x += this.speedX;
-    // this.y += this.speedY + this.gravitySpeed;
-
     this.x += this.speedX + this.gravitySpeed*0.5;
     this.y += this.speedY + this.gravitySpeed*0.5;
 
-    /*
+    /* rotate movement: but it made myGamePiece behave like a boomerang...
     this.angle += this.moveAngle * Math.PI / 180;
     this.x += this.speedX*Math.sin(this.angle);
     this.y -= this.speedY*Math.cos(this.angle);
+    }
     */
 
     this.hitEdge();
