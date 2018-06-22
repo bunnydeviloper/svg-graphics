@@ -83,8 +83,8 @@ function component(width, height, color, x, y, type) {
 
   this.width = width;
   this.height = height;
-  this.speedX = 2;
-  this.speedY = 2;
+  this.speedX = 0;
+  this.speedY = 0;
   this.angle = 0;
   this.moveAngle = 1;
   this.gravity = 0.05;
