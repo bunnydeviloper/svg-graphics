@@ -86,8 +86,8 @@ function component(width, height, color, x, y, type) {
   this.speedX = 0;
   this.speedY = 0;
   this.angle = 0;
-  this.moveAngle = 1;
-  this.gravity = 0.05;
+  // this.moveAngle = 1;
+  this.gravity = 0.01;
   this.gravitySpeed = 0;
   this.bounce = 0.6; // 0 means no bounce, 1 means bounce back to where it start falling
   this.color = color;
@@ -96,8 +96,6 @@ function component(width, height, color, x, y, type) {
   this.update = function() {
     ctx = myGameArea.context;
 
-    if (type == "image" || type == "background") {
-    }
     if (type == "background") {
       ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
       // Add a second background after the first background
@@ -147,13 +145,14 @@ function component(width, height, color, x, y, type) {
   this.newPos = function() {
     if (this.type == "background") {
        this.x += this.speedX;
+      // if reach the end of image, rewind to begining
       if (this.x == -(this.width)) {
         this.x = 0;
-      } // if reach the end of image, rewind
+      }
     } else {
     this.gravitySpeed += this.gravity;
-    this.x += this.speedX + this.gravitySpeed*0.5;
-    this.y += this.speedY + this.gravitySpeed*0.5;
+    this.x += this.speedX + this.gravitySpeed;
+    this.y += this.speedY + this.gravitySpeed;
 
     /* rotate movement: but it made myGamePiece behave like a boomerang...
     this.angle += this.moveAngle * Math.PI / 180;
@@ -161,22 +160,38 @@ function component(width, height, color, x, y, type) {
     this.y -= this.speedY*Math.cos(this.angle);
     }
     */
+    }
 
     this.hitEdge();
   };
   this.hitEdge = function() {
-    // if hit top edge, fall down
-    /*
-    if (this.y < (this.width/2)) {
-      this.y = this.width/2;
-      this.gravitySpeed = -(this.gravitySpeed * this.bounce)*1.5;
-    }
-    */
-    const rockbottom = myGameArea.canvas.height - this.height;
-    // if hit bottom edge, bounce back up
-    if (this.y > rockbottom) {
-      this.y = rockbottom;
-      this.gravitySpeed = -(this.gravitySpeed * this.bounce);
+    if (this.type != "background") {
+      // note: gravity has to be INSIDE each if statement, cannot combine outside
+      // if hit top edge, fall down
+      if (this.y < (this.width/2)) {
+        this.y = this.width/2;
+        this.gravitySpeed = -(this.gravitySpeed * this.bounce);
+      }
+
+      const rockbottom = myGameArea.canvas.height - this.height;
+      // if hit bottom edge, bounce back up
+      if (this.y > rockbottom) {
+        this.y = rockbottom;
+        this.gravitySpeed = -(this.gravitySpeed * this.bounce);
+      }
+
+      // if hit left edge, bounce out rigthward
+      if (this.x < (this.width/2)) {
+        this.x = this.width/2;
+        this.gravitySpeed = -(this.gravitySpeed * this.bounce);
+      }
+
+      // if hit right edge (rarely), bounce leftward
+      const wallblock = myGameArea.canvas.width - this.width;
+      if (this.x > wallblock) {
+        this.x = wallblock;
+        this.gravitySpeed = -(this.gravitySpeed * this.bounce);
+      }
     }
   };
   this.crashWith = function(otherobj) {
@@ -190,11 +205,12 @@ function component(width, height, color, x, y, type) {
     const otherbottom = otherobj.y + (otherobj.height);
 
     let crash = true;
-    //console.log("my right", myright, "and other left", otherleft);
-    if ((mybottom < othertop) || // myGamePiece is above
-        (mytop > otherbottom) || // myGamePiece is below
-        (myright < otherleft) || // myGamePiece is on the left side
-        (myleft > otherright)) { // myGamePiece is on the right side
+    // note: had to subtract '10' b/c of lagging/shaking error caused by rotation
+    // if use regular square piece, no need to subtract 10
+    if ((mybottom-10 < othertop) || // myGamePiece is above
+        (mytop-10 > otherbottom) || // myGamePiece is below
+        (myright-10 < otherleft) || // myGamePiece is on the left side
+        (myleft-10 > otherright)) { // myGamePiece is on the right side
        crash = false;
     }
     return crash;
@@ -294,6 +310,8 @@ function updateGameArea() {
 
     // TODO: press <spacebar> to restart the game
     // if (myGameArea.keys[32]) startGame(); // space bar doesnt work yet
+
+    // TODO: add buttons easy, medium, hard / harder means everyInterval(n)
 
     myGameArea.keys = []; // soft reset
   }

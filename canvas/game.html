@@ -31,7 +31,6 @@
       <img id="spaceship" src="spaceship.png" onclick="startGame('spaceship.png')" />
       <img id="mangocat" src="catdriving.jpg" onclick="startGame('catreading.jpg')" />
       <img id="pusheen" src="pusheendriving.gif" onclick="startGame('pushsheenlazy.gif')" />
-      <p>NOTWORKING: Change Game Avatar By Clicking Above Images. Also: todo: add button to change easy, hard (harder means reduce everyInterval)</p>
       <p>If you don't hear background music, try go to "chrome://flags/#autoplay-policy" and change autoplay setting to "No user gesture is required"</p>
     </div>
 
@@ -44,7 +43,8 @@
       <button onmousedown="move('left')" onmouseup="stopMove()" ontouchstart="move('left')">LEFT(h)</button>
       <button onmousedown="move('right')" onmouseup="stopMove()" ontouchstart="move('right')">RIGHT(l)</button>
 
-      <button onmousedown="restart()" ontouchstart="restart()" style="background-color: magenta">
+      <button onmousedown="restart()" ontouchstart="restart()"
+        style="display: none; background-color: magenta">
         RESTART (spacebar)
       </button>
     </div>
