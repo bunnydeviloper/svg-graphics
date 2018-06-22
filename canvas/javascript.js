@@ -3,7 +3,9 @@ window.onload = function() { startGame(); }
 let myGamePiece;        // initialize game piece component
 let myObstacles = [];   // initialize obstacle component, save multiples obs in an array
 let myScore;            // initialize score component
-let myBackground;         // initialize background component
+let myBackground;       // initialize background component
+let mySound;            // initialize sound component
+let myMusic;            // initialize sound component for background music
 
 /* TODO: for user to select diff. avatar -> doesn't work yet, not sure why...
 const pickAvatar(id) => {
@@ -24,6 +26,11 @@ function startGame() {
 
   myScore = new component("20px", "Consolas", "black", 480, 40, "text");
   myBackground = new component(699, 410, 'background.jpg', -5, 0, "background");
+
+  mySound = new sound("gunhit.mp3");
+  myMusic = new sound("candycrush.mp3", "background");
+  myMusic.play();
+
   myGameArea.start();
 }
 
@@ -135,10 +142,14 @@ function component(width, height, color, x, y, type) {
     if (this.type == "background") {
       if (this.x == -(this.width)) this.x = 0; // if reach the end of image, rewind
     }
-    this.hitBottom();
+    this.hitEdge();
   };
-  this.hitBottom = function() {
+  this.hitEdge = function() {
     const rockbottom = myGameArea.canvas.height - this.height;
+    if (this.y < 0) {
+      this.y = 0;
+      this.gravitySpeed = -(this.gravitySpeed * this.bounce)*1.5;
+    }
     if (this.y > rockbottom) {
       this.y = rockbottom;
       this.gravitySpeed = -(this.gravitySpeed * this.bounce);
@@ -165,6 +176,23 @@ function component(width, height, color, x, y, type) {
   }
 }
 
+function sound(src, type) {
+  this.sound = document.createElement("audio");
+  this.sound.src = src;
+  this.sound.type = type;
+  this.sound.setAttribute("preload", "auto");
+  this.sound.setAttribute("controls", "none");
+  this.sound.style.display = "none";
+  if (this.sound.type == "background") this.sound.loop = true;
+  document.body.appendChild(this.sound);
+  this.play = function(){
+      this.sound.play();
+  }
+  this.stop = function(){
+      this.sound.pause();
+  }
+}
+
 // check the current frame number and return true if corresponds with given interval
 // make sure to initialize frameNo in myGameArea.start()
 function everyInterval(n) {
@@ -176,7 +204,13 @@ function accelerate(n) { myGamePiece.gravity = n }
 
 function updateGameArea() {
   // first, loop through every obstacles to see if there's a crash, then stop
-  myObstacles.forEach(obstacle => { if (myGamePiece.crashWith(obstacle)) myGameArea.stop(); } );
+  myObstacles.forEach(obstacle => {
+    if (myGamePiece.crashWith(obstacle)) {
+      mySound.play();
+      myMusic.stop();
+      myGameArea.stop();
+    }
+  } );
   
   // otherwise continue the game, continue to count the frame
   myGameArea.clear();
@@ -213,7 +247,7 @@ function updateGameArea() {
   myScore.text = "SCORE: " + myGameArea.score;
   if (myGameArea.score >= 0) myScore.update(); // display score starting from 0
 
-  myGamePiece.angle += 1 * Math.PI / 180;
+  myGamePiece.angle += 2 * Math.PI / 180;
   myGamePiece.newPos();
   myGamePiece.update();
 
