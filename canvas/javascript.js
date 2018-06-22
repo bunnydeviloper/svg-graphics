@@ -12,7 +12,6 @@ const pickAvatar(id) => {
   let avatar = document.getElementbyId(id);
   avatar.addEventListener("click", startGame(id));
 };
-
 window.onload = function() {
 document.getElementById('spaceship').onclick = function() { startGame('spaceship.png'); };
 document.getElementById('mangocat').onclick = function() { startGame('catreading.jpg'); };
@@ -59,7 +58,6 @@ const myGameArea = {
     //  myGameArea.y = e.touches[0].screenY;
     // })
   },
-
   // clear the canvas at every update (constantly), hence myGamePiece won't leave a trail
   // if not, all movements of all components will leave a trail where it was positioned last frame
   clear: function() {
@@ -90,7 +88,7 @@ function component(width, height, color, x, y, type) {
   this.angle = 0;
   this.moveAngle = 1;
   this.gravity = 0.05;
-  this.gravitySpeed = 0.1;
+  this.gravitySpeed = 0;
   this.bounce = 0.6; // 0 means no bounce, 1 means bounce back to where it start falling
   this.color = color;
   this.x = x;
