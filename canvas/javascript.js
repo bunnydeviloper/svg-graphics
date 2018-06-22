@@ -26,7 +26,7 @@ function startGame() {
   myScore = new component("20px", "Consolas", "black", 480, 40, "text");
   myBackground = new component(699, 410, 'background.jpg', -5, 0, "background");
   mySound = new sound("gunhit.mp3");
-  myMusic = new sound("candycrush.mp3", "background");
+  myMusic = new sound("candycrush.mp3", "backgroundMusic");
   myMusic.play();
 
   myGameArea.start();
@@ -96,6 +96,8 @@ function component(width, height, color, x, y, type) {
   this.update = function() {
     ctx = myGameArea.context;
 
+    if (type == "image" || type == "background") {
+    }
     if (type == "background") {
       ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
       // Add a second background after the first background
@@ -109,7 +111,7 @@ function component(width, height, color, x, y, type) {
       ctx.save();
       ctx.translate(this.x, this.y);
       ctx.rotate(this.angle);
-      ctx.drawImage(this.image, this.x/-2, this.y/-2, this.width, this.height);
+      ctx.drawImage(this.image, this.width/-2, this.height/-2, this.width, this.height);
       ctx.restore();
     }
     if (type == "piece") {
@@ -144,9 +146,11 @@ function component(width, height, color, x, y, type) {
   };
   this.newPos = function() {
     if (this.type == "background") {
-      this.x += this.speedX;
-      if (this.x == -(this.width)) this.x = 0; // if reach the end of image, rewind
-    } else {
+      // this.x += this.speedX;
+      // this.y += this.speedY;
+      console.log(this.type);
+      if (this.x == -(this.width)) { this.x = 0; } // if reach the end of image, rewind
+    }
     this.gravitySpeed += this.gravity;
     // this.x += this.speedX;
     // this.y += this.speedY + this.gravitySpeed;
@@ -159,16 +163,17 @@ function component(width, height, color, x, y, type) {
     this.x += this.speedX*Math.sin(this.angle);
     this.y -= this.speedY*Math.cos(this.angle);
     */
-    }
 
     this.hitEdge();
   };
   this.hitEdge = function() {
     // if hit top edge, fall down
+    /*
     if (this.y < (this.width/2)) {
       this.y = this.width/2;
       this.gravitySpeed = -(this.gravitySpeed * this.bounce)*1.5;
     }
+    */
     const rockbottom = myGameArea.canvas.height - this.height;
     // if hit bottom edge, bounce back up
     if (this.y > rockbottom) {
@@ -198,14 +203,14 @@ function component(width, height, color, x, y, type) {
   }
 }
 
-function sound(src, type) {
+function sound(src, soundType) {
   this.sound = document.createElement("audio");
   this.sound.src = src;
-  this.sound.type = type;
+  this.sound.soundType = soundType;
   this.sound.setAttribute("preload", "auto");
   this.sound.setAttribute("controls", "none");
   this.sound.style.display = "none";
-  if (this.sound.type == "background") this.sound.loop = true;
+  if (this.sound.soundType == "backgroundMusic") this.sound.loop = true;
   document.body.appendChild(this.sound);
   this.play = function(){
       this.sound.play();
@@ -234,7 +239,7 @@ function updateGameArea() {
       return;
     }
   } );
-  
+
   // otherwise continue the game
   myGameArea.clear(); // clear trailing path of myGamePiece
 
@@ -257,8 +262,8 @@ function updateGameArea() {
     const color = "#"+Math.random().toString(16).slice(-6);   //randomize obstacle colors
     const x = myGameArea.canvas.width;
 
-    myObstacles.push(new component(20, height, color, x, 0, "obstacles")); // top obstacle
-    myObstacles.push(new component(20, x-height-gap, color, x, height+gap, "obstacles")); // bottom obs
+    myObstacles.push(new component(10, height, color, x, 0, "obstacles")); // top obstacle
+    myObstacles.push(new component(10, x-height-gap, color, x, height+gap, "obstacles")); // bottom obs
   }
 
   // after clearing canvas and push new obstacle to array, move obstacles leftward at interval
@@ -288,7 +293,6 @@ function updateGameArea() {
     // press <s> to activate bird shrinking functionality
     // TODO: limit the time you can shrink, or how often you can shrink
     if (myGameArea.keys[83]) move('shrink');
-    
 
     // TODO: press <spacebar> to restart the game
     // if (myGameArea.keys[32]) startGame(); // space bar doesnt work yet
